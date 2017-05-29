@@ -390,7 +390,8 @@ sys_mmap(struct proc *p, void *v, register_t *retval)
 
 	if ((flags & MAP_FLAGMASK) != flags)
 		return (EINVAL);
-	if ((flags & (MAP_SHARED|MAP_PRIVATE)) == (MAP_SHARED|MAP_PRIVATE))
+	if ((flags & (MAP_SHARED|MAP_PRIVATE)) == 0 ||
+	    (flags & (MAP_SHARED|MAP_PRIVATE)) == (MAP_SHARED|MAP_PRIVATE))
 		return (EINVAL);
 	if ((flags & (MAP_FIXED|__MAP_NOREPLACE)) == __MAP_NOREPLACE)
 		return (EINVAL);
