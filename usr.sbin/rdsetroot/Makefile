@@ -4,7 +4,7 @@ SRCS=	elf32.c elf64.c elfrdsetroot.c
 
 PROG=	rdsetroot
 
-COPTS+=	-Wall
+COPTS+=	-Wall -Werror
 
 NOMAN=	true
 

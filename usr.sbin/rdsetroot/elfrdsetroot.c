@@ -72,7 +72,6 @@ int
 main(int argc, char *argv[])
 {
 	int ch, fd, n, xflag = 0, fsd;
-	int found = 0, phsize;
 	char *fs = NULL;
 	char *file;
 	u_int32_t *ip;
