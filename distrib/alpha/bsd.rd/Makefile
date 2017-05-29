@@ -24,9 +24,9 @@ bsd.rd:	bsd.rd_unz
 	strip ${STRIPOPTS} bsd.strip
 	gzip -c ${GZIPFLAGS} bsd.strip > bsd.rd
 
-bsd.rd_unz: bsd ${IMAGE} rdsetroot
+bsd.rd_unz: bsd ${IMAGE}
 	cp bsd bsd.rd_unz
-	${.OBJDIR}/rdsetroot bsd.rd_unz ${IMAGE}
+	rdsetroot bsd.rd_unz ${IMAGE}
 	strip -R .SUNW_ctf -R .shstrtab bsd.rd_unz
 
 bsd:
@@ -43,11 +43,6 @@ ${IMAGE}: ${CBIN}
 	    sh ${UTILS}/runlist.sh ${LISTS}
 	rm $@.d/${CBIN}
 	makefs ${MAKEFSARGS_RD} $@ $@.d
-
-rdsetroot: ${TOP}/../common/elfrdsetroot.c
-	${HOSTCC} ${HOSTCFLAGS} -o rdsetroot \
-	    ${TOP}/../common/elfrdsetroot.c ${TOP}/../common/elf32.c \
-	    ${TOP}/../common/elf64.c
 
 .ifdef RELEASEDIR
 beforeinstall:

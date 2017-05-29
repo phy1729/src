@@ -40,9 +40,9 @@ bsd.IP${IP}:
 .endif
 	cp -p ${.TOP}/../../sys/arch/sgi/compile/RAMDISK-IP${IP}/obj/bsd bsd.IP${IP}
 
-${BSD_RD}.IP${IP}: ${IMAGE} bsd.IP${IP} rdsetroot
+${BSD_RD}.IP${IP}: ${IMAGE} bsd.IP${IP}
 	cp bsd.IP${IP} ${BSD_RD}.IP${IP}
-	${.OBJDIR}/rdsetroot ${BSD_RD}.IP${IP} ${IMAGE}
+	rdsetroot ${BSD_RD}.IP${IP} ${IMAGE}
 .endfor
 
 ${IMAGE}: ${CBIN}
@@ -57,11 +57,6 @@ ${IMAGE}: ${CBIN}
 
 .endif
 
-rdsetroot:	${TOP}/../common/elfrdsetroot.c
-	${HOSTCC} ${HOSTCFLAGS} -o rdsetroot \
-	    ${TOP}/../common/elfrdsetroot.c ${TOP}/../common/elf32.c \
-	    ${TOP}/../common/elf64.c
-
 ${CBIN}.mk ${CBIN}.cache ${CBIN}.c: ${CRUNCHCONF}
 	crunchgen -M -E -D ${.CURDIR}/../../.. -L ${DESTDIR}/usr/lib ${.ALLSRC}
 
@@ -74,7 +69,7 @@ ${CRUNCHCONF}: ${LISTS}
 clean cleandir:
 	/bin/rm -f *.core ${IMAGE} ${CBIN} ${CBIN}.mk ${CBIN}.cache \
 	    lib*.a lib*.olist ${CBIN}.map \
-	    ${ALLBSD} ${ALLBSDRD} *.o *.lo *.c rdsetroot
+	    ${ALLBSD} ${ALLBSDRD} *.o *.lo *.c
 	/bin/rm -rf ${IMAGE}.d
 
 .ifdef RELEASEDIR
