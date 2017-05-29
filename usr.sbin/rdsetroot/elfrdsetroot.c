@@ -39,6 +39,7 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 
+#include <err.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -100,10 +101,8 @@ main(int argc, char *argv[])
 		usage();
 
 	fd = open(file, xflag ? O_RDONLY : O_RDWR, 0644);
-	if (fd < 0) {
-		perror(file);
-		exit(1);
-	}
+	if (fd < 0)
+		err(1, "%s", file);
 
 	if (fs) {
 		if (xflag)
@@ -116,29 +115,22 @@ main(int argc, char *argv[])
 		else
 			fsd = dup(STDIN_FILENO);
 	}
-	if (fsd < 0) {
-		perror(fs);
-		exit(1);
-	}
+	if (fsd < 0)
+		err(1, "%s", fs);
 
 	n = read(fd, &head, sizeof(head));
-	if (n < sizeof(head)) {
-		fprintf(stderr, "%s: reading header\n", file);
-		exit(1);
-	}
+	if (n < sizeof(head))
+		errx(1, "%s: reading header\n", file);
 
-	if (!IS_ELF(head)) {
-		fprintf(stderr, "%s: bad magic number\n", file);
-		exit(1);
-	}
+	if (!IS_ELF(head))
+		errx(1, "%s: bad magic number\n", file);
 
 	if (head.e_ident[EI_CLASS] == ELFCLASS32) {
 		elf_fn = &ELF32_fn;
 	} else if (head.e_ident[EI_CLASS] == ELFCLASS64) {
 		elf_fn = &ELF64_fn;
 	} else {
-		fprintf(stderr, "%s: invalid elf, not 32 or 64 bit", file);
-		exit(1);
+		errx(1, "%s: invalid elf, not 32 or 64 bit", file);
 	}
 
 	elf_fn->locate_image(fd, &head, file, &rd_root_size_off,
@@ -151,11 +143,8 @@ main(int argc, char *argv[])
 	dataseg = mmap(NULL, mmap_size,
 	    xflag ? PROT_READ : PROT_READ | PROT_WRITE,
 	    MAP_SHARED, fd, mmap_off);
-	if (dataseg == MAP_FAILED) {
-		fprintf(stderr, "%s: can not map data seg\n", file);
-		perror(file);
-		exit(1);
-	}
+	if (dataseg == MAP_FAILED)
+		err(1, "cannot map data seg for %s", file);
 
 	/*
 	 * Find value in the location: rd_root_size
@@ -176,30 +165,22 @@ main(int argc, char *argv[])
 	if (xflag) {
 		n = write(fsd, dataseg + rd_root_image_off,
 		    (size_t)rd_root_size_val);
-		if (n != rd_root_size_val) {
-			perror("write");
-			exit(1);
-		}
+		if (n != rd_root_size_val)
+			err(1, "write");
 	} else {
 		struct stat sstat;
 
-		if (fstat(fsd, &sstat) == -1) {
-			perror("fstat");
-			exit(1);
-		}
+		if (fstat(fsd, &sstat) == -1)
+			err(1, "fstat");
 		if (S_ISREG(sstat.st_mode) &&
-		    sstat.st_size > rd_root_size_val) {
-			fprintf(stderr, "ramdisk too small 0x%llx 0x%llx\n",
+		    sstat.st_size > rd_root_size_val)
+			errx(1, "ramdisk too small 0x%llx 0x%llx\n",
 			    (unsigned long long)sstat.st_size,
 			    (unsigned long long)rd_root_size_val);
-			exit(1);
-		}
 		n = read(fsd, dataseg + rd_root_image_off,
 		    (size_t)rd_root_size_val);
-		if (n < 0) {
-			perror("read");
-			exit(1);
-		}
+		if (n < 0)
+			err(1, "read");
 
 		msync(dataseg, mmap_size, 0);
 	}

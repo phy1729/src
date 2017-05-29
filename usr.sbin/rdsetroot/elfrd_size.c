@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <nlist.h>
 
+#include <err.h>
 #include <errno.h>
 #include <limits.h>
 
@@ -48,10 +49,8 @@ ELFNAME(locate_image)(int fd, struct elfhdr *ghead,  char *file,
 	/* elfhdr may not have the full header? */
 	lseek(fd, 0, SEEK_SET);
 
-	if (read(fd, &head, sizeof(head)) != sizeof(head)) {
-		fprintf(stderr, "%s: can't read phdr area\n", file);
-		exit(1);
-	}
+	if (read(fd, &head, sizeof(head)) != sizeof(head))
+		errx(1, "%s: can't read phdr area\n", file);
 
 	phsize = head.e_phnum * sizeof(Elf_Phdr);
 	ph = malloc(phsize);
@@ -59,10 +58,8 @@ ELFNAME(locate_image)(int fd, struct elfhdr *ghead,  char *file,
 
 	lseek(fd, head.e_phoff, SEEK_SET);
 
-	if (read(fd, ph, phsize) != phsize) {
-		fprintf(stderr, "%s: can't read phdr area\n", file);
-		exit(1);
-	}
+	if (read(fd, ph, phsize) != phsize)
+		errx(1, "%s: can't read phdr area\n", file);
 
         for (n = 0; n < head.e_phnum && !found; n++) {
                 if (ph[n].p_type == PT_LOAD)
@@ -70,11 +67,8 @@ ELFNAME(locate_image)(int fd, struct elfhdr *ghead,  char *file,
                             n, prd_root_size_off, prd_root_image_off,
 			    pmmap_off, pmmap_size);
         }
-        if (!found) {
-                fprintf(stderr, "%s: can't locate space for rd_root_image!\n",
-                    file);
-                exit(1);
-        }
+        if (!found)
+                errx(1, "%s: can't locate space for rd_root_image!\n", file);
 	free(ph);
 }
 
@@ -92,10 +86,8 @@ ELFNAME(find_rd_root_image)(char *file, int fd, Elf_Phdr *ph, int segment,
 	unsigned long kernel_start, kernel_size;
 	uint64_t rd_root_size_off, rd_root_image_off;
 
-	if (ELFNAME(nlist)(fd, ELFNAME(wantsyms))) {
-		fprintf(stderr, "%s: no rd_root_image symbols?\n", file);
-		exit(1);
-	}
+	if (ELFNAME(nlist)(fd, ELFNAME(wantsyms)))
+		errx(1, "%s: no rd_root_image symbols?\n", file);
 	kernel_start = ph->p_paddr;
 	kernel_size = ph->p_filesz;
 
