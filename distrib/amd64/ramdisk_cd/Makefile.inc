@@ -71,9 +71,9 @@ bsd.gz: bsd.rd
 	strip -R .comment bsd.strip
 	gzip -c9n bsd.strip > bsd.gz
 
-bsd.rd:	mr.fs bsd rdsetroot
+bsd.rd:	mr.fs bsd
 	cp bsd bsd.rd
-	${.OBJDIR}/rdsetroot bsd.rd mr.fs
+	rdsetroot bsd.rd mr.fs
 
 
 bsd:
@@ -93,11 +93,6 @@ mr.fs: instbin
 	vnconfig -v -c ${VND} mr.fs
 	df -i /dev/${VND}a
 	vnconfig -u ${VND}
-
-rdsetroot:	${TOP}/../common/elfrdsetroot.c
-	${HOSTCC} ${HOSTCFLAGS} -o rdsetroot \
-	    ${TOP}/../common/elfrdsetroot.c ${TOP}/../common/elf32.c \
-	    ${TOP}/../common/elf64.c
 
 .ifdef RELEASEDIR
 install:
@@ -125,7 +120,7 @@ clean cleandir:
 	/bin/rm -f *.core mr.fs instbin instbin.mk instbin*.cache \
 	    *.o *.lo *.c bsd bsd.rd bsd.gz bsd.strip floppy*.fs \
 	    lib*.a lib*.olist instbin.map \
-	    rdsetroot boot instbin.conf ${FS}
+	    boot instbin.conf ${FS}
 	/bin/rm -rf mr.fs.d
 
 .include <bsd.obj.mk>

@@ -53,19 +53,13 @@ obsd:
 	    su ${BUILDUSER} -c '${MAKE} config && ${MAKE} clean && exec ${MAKE}'
 	cp -p ${SRCDIR}/sys/arch/${MACHINE}/compile/${KERNEL}/obj/bsd obsd
 
-bsd.rd:	obsd ${IMAGE} rdsetroot
+bsd.rd:	obsd ${IMAGE}
 	cp obsd bsd.rd
-	${.OBJDIR}/rdsetroot bsd.rd ${IMAGE}
+	rdsetroot bsd.rd ${IMAGE}
 	@${STRIP} bsd.rd
 
 bsd:	bsd.rd
 	(cat bsd.rd ; dd if=/dev/zero count=1) | ${GZIPCMD} ${GZIPFLAGS} > bsd
-
-rdsetroot: ${.CURDIR}/../../common/elfrdsetroot.c \
-	   ${.CURDIR}/../../common/elf32.c ${.CURDIR}/../../common/elf64.c
-	${HOSTCC} ${HOSTCCFLAGS} -o rdsetroot \
-	    ${.CURDIR}/../../common/elfrdsetroot.c \
-	    ${.CURDIR}/../../common/elf32.c ${.CURDIR}/../../common/elf64.c
 
 ${IMAGE}: ${CBIN}
 	rm -rf $@.d

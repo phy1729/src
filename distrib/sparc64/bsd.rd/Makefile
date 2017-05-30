@@ -25,9 +25,9 @@ bsd.rd:	bsd.rd_unz
 	${STRIP} bsd.strip
 	${GZIPCMD} -c ${GZIPFLAGS} bsd.strip > bsd.rd
 
-bsd.rd_unz: bsd ${IMAGE} rdsetroot
+bsd.rd_unz: bsd ${IMAGE}
 	cp bsd bsd.rd_unz
-	${.OBJDIR}/rdsetroot bsd.rd_unz ${IMAGE}
+	rdsetroot bsd.rd_unz ${IMAGE}
 
 bsd:
 	cd ${.CURDIR}/../../../sys/arch/sparc64/compile/${RAMDISK} && \
@@ -43,11 +43,6 @@ ${IMAGE}: ${CBIN}
 	    sh ${UTILS}/runlist.sh ${LISTS}
 	rm $@.d/${CBIN}
 	makefs ${MAKEFSARGS_RD} $@ $@.d
-
-rdsetroot:	${TOP}/../common/elfrdsetroot.c
-	${HOSTCC} ${HOSTCFLAGS} -o rdsetroot \
-	    ${TOP}/../common/elfrdsetroot.c ${TOP}/../common/elf32.c \
-	    ${TOP}/../common/elf64.c
 
 .ifdef RELEASEDIR
 install:
@@ -70,7 +65,7 @@ ${CBIN}: ${CBIN}.mk ${CBIN}.cache ${CBIN}.c
 clean cleandir:
 	/bin/rm -f *.core ${IMAGE} ${CBIN} ${CBIN}.mk ${CBIN}*.cache \
 	    lib*.a lib*.olist ${CBIN}.map \
-	    *.o *.lo *.c bsd bsd.rd{,_unz} bsd.gz bsd.strip floppy*.fs rdsetroot
+	    *.o *.lo *.c bsd bsd.rd{,_unz} bsd.gz bsd.strip floppy*.fs
 	/bin/rm -rf ${IMAGE}.d
 
 .include <bsd.obj.mk>

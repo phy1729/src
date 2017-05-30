@@ -41,9 +41,9 @@ bsd:
 	    su ${BUILDUSER} -c '${MAKE} config && ${MAKE} clean && exec ${MAKE}'
 	cp -p ${TOP}/../../sys/arch/armv7/compile/RAMDISK/obj/bsd bsd
 
-${BSD_RD}: ${IMAGE} bsd rdsetroot
+${BSD_RD}: ${IMAGE} bsd
 	cp bsd ${BSD_RD}
-	${.OBJDIR}/rdsetroot ${BSD_RD} ${IMAGE}
+	rdsetroot ${BSD_RD} ${IMAGE}
 
 ${IMAGE}: ${CBIN}
 	rm -rf $@.d
@@ -60,11 +60,6 @@ ${IMAGE}: ${CBIN}
 
 .endif
 
-rdsetroot:	${TOP}/../common/elfrdsetroot.c
-	${HOSTCC} ${HOSTCFLAGS} -o rdsetroot \
-	    ${TOP}/../common/elfrdsetroot.c ${TOP}/../common/elf32.c \
-	    ${TOP}/../common/elf64.c
-
 ${CBIN}.mk ${CBIN}.cache ${CBIN}.c: ${CRUNCHCONF}
 	crunchgen -E -D ${.CURDIR}/../../.. -L ${DESTDIR}/usr/lib ${.ALLSRC}
 
@@ -77,7 +72,7 @@ ${CRUNCHCONF}: ${LISTS}
 clean cleandir:
 	/bin/rm -f *.core ${IMAGE} ${CBIN} ${CBIN}.mk ${CBIN}.cache \
 	    lib*.a lib*.olist ${CBIN}.map \
-	    *.o *.lo *.c ${ALLBSD} ${ALLBSDRD} rdsetroot
+	    *.o *.lo *.c ${ALLBSD} ${ALLBSDRD}
 	rm -f instbin.conf
 	rm -rf cd-dir ${IMAGE}.d
 

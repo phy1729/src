@@ -21,7 +21,6 @@ REALIMAGE!=	echo /var/tmp/image.${PID}
 IMAGE?=		ramdisk${REV}.fs
 IMAGESIZE?=	8192 # 4MB in 512 byte blocks
 NEWFS_WILL_FAIL?=false
-RDSETROOT_EXT_SRC=${.CURDIR}/../common/elf32.c ${.CURDIR}/../common/elf64.c
 CRUNCHGENOPTS?=-E
 KERNEL?=	RAMDISK
 UTILS?=		${.CURDIR}/../miniroot
@@ -77,17 +76,13 @@ bsd:
 	    su ${BUILDUSER} -c '${MAKE} config && ${MAKE} clean && env COPTS=-Oz ${MAKE}'
 	cp -p ${.CURDIR}/../../sys/arch/${MACHINE}/compile/${KERNEL}/obj/bsd bsd
 
-bsd.rd:	bsd ${IMAGE} rdsetroot
+bsd.rd:	bsd ${IMAGE}
 	cp bsd bsd.rd
-	${.OBJDIR}/rdsetroot bsd.rd ${IMAGE}
+	rdsetroot bsd.rd ${IMAGE}
 	${STRIP} bsd.rd
 
 bsd.gz:	bsd.rd
 	${GZIPCMD} ${GZIPFLAGS} < bsd.rd > bsd.gz
-
-rdsetroot: ${.CURDIR}/../common/elfrdsetroot.c ${RDSETROOT_EXT_SRC}
-	${HOSTCC} ${HOSTCCFLAGS} -o rdsetroot ${RDSETROOT_EXT_SRC} \
-	    ${.CURDIR}/../common/elfrdsetroot.c
 
 ${IMAGE}: ${CBIN}
 	dd if=/dev/zero of=${REALIMAGE} count=${IMAGESIZE}
