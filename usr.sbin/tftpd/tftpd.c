@@ -1022,10 +1022,10 @@ retryread:
 		}
 	} else {
 		if (mode == RRQ) {
-			if ((stbuf.st_mode & (S_IRUSR >> 6)) == 0)
+			if ((stbuf.st_mode & S_IROTH) == 0)
 				return (EACCESS);
 		} else {
-			if ((stbuf.st_mode & (S_IWUSR >> 6)) == 0)
+			if ((stbuf.st_mode & S_IWOTH) == 0)
 				return (EACCESS);
 		}
 	}
