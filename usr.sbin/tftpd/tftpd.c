@@ -390,8 +390,14 @@ main(int argc, char *argv[])
 	if (!debug && rdaemon(devnull) == -1)
 		err(1, "unable to daemonize");
 
-	if (pledge("stdio rpath wpath cpath fattr dns inet", NULL) == -1)
-		lerr(1, "pledge");
+	if (cancreate) {
+		if (pledge("stdio rpath wpath cpath fattr dns inet", NULL)
+		    == -1)
+			lerr(1, "pledge");
+	} else {
+		if (pledge("stdio rpath wpath fattr dns inet", NULL) == -1)
+			lerr(1, "pledge");
+	}
 
 	event_init();
 
