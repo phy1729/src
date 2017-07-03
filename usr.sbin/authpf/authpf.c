@@ -148,8 +148,8 @@ main(int argc, char *argv[])
 
 	login_close(lc);
 
-	if (strcmp(shell, PATH_AUTHPF_SHELL) &&
-	    strcmp(shell, PATH_AUTHPF_SHELL_NOIP)) {
+	if (strcmp(shell,
+	    user_ip ? PATH_AUTHPF_SHELL : PATH_AUTHPF_SHELL_NOIP)) {
 		syslog(LOG_ERR, "wrong shell for user %s, uid %u",
 		    pw->pw_name, pw->pw_uid);
 		if (shell != pw->pw_shell)
