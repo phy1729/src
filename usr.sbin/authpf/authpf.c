@@ -225,7 +225,7 @@ main(int argc, char *argv[])
 			goto die;
 		}
 
-		if (flock(fileno(pidfp), LOCK_EX|LOCK_NB) == 0)
+		if (flock(pidfd, LOCK_EX|LOCK_NB) == 0)
 			break;
 		save_errno = errno;
 
@@ -308,7 +308,7 @@ main(int argc, char *argv[])
 	rewind(pidfp);
 	fprintf(pidfp, "%ld\n%s\n", (long)getpid(), luser);
 	fflush(pidfp);
-	(void) ftruncate(fileno(pidfp), ftello(pidfp));
+	(void) ftruncate(pidfd, ftello(pidfp));
 
 	if (change_filter(1, luser, ipsrc) == -1) {
 		printf("Unable to modify filters\r\n");
