@@ -124,8 +124,8 @@ struct	llinfo_nd6 {
 #define MIN_RANDOM_FACTOR		512	/* 1024 * 0.5 */
 #define MAX_RANDOM_FACTOR		1536	/* 1024 * 1.5 */
 #define ND_COMPUTE_RTIME(x) \
-		(((MIN_RANDOM_FACTOR * (x >> 10)) + (arc4random() & \
-		((MAX_RANDOM_FACTOR - MIN_RANDOM_FACTOR) * (x >> 10)))) /1000)
+		((arc4random_uniform((MAX_RANDOM_FACTOR - MIN_RANDOM_FACTOR) * \
+		(x >> 10)) + MIN_RANDOM_FACTOR * (x >> 10)) / 1000)
 
 extern int nd6_delay;
 extern int nd6_umaxtries;
