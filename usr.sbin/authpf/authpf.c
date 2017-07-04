@@ -945,7 +945,7 @@ do_death(int active)
 			authpf_kill_states();
 		}
 	}
-	if (pidfile[0] && pidfd != -1)
+	if (pidfd != -1)
 		if (unlink(pidfile) == -1)
 			syslog(LOG_ERR, "cannot unlink %s (%m)", pidfile);
 	exit(ret);
