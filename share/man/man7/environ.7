@@ -83,7 +83,6 @@ from the password file
 The login name of the user.
 .It Ev PATH
 The sequence of directories, separated by colons, searched by
-.Xr csh 1 ,
 .Xr sh 1 ,
 .Xr ksh 1 ,
 .Xr system 3 ,
@@ -175,11 +174,7 @@ Further names may be placed in the environment by the
 command and
 .Ar name Ns = Ns Ar value
 arguments in
-.Xr sh 1 ,
-or by the
-.Ic setenv
-command if you use
-.Xr csh 1 .
+.Xr sh 1 .
 It is unwise to change certain
 .Xr sh 1
 variables that are frequently exported by
@@ -197,7 +192,6 @@ The current environment variables can be printed with
 or
 .Xr printenv 1 .
 .Sh SEE ALSO
-.Xr csh 1 ,
 .Xr env 1 ,
 .Xr ex 1 ,
 .Xr login 1 ,

@@ -42,7 +42,7 @@
  * /etc/shells.
  */
 
-static char *okshells[] = { _PATH_BSHELL, _PATH_CSHELL, _PATH_KSHELL, NULL };
+static char *okshells[] = { _PATH_BSHELL, _PATH_KSHELL, NULL };
 static char **curshell, **shells;
 static char **initshells(void);
 

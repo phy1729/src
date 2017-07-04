@@ -108,7 +108,7 @@ value(char *name)
 		return(env);
 	/* not set, see if we can provide a default */
 	else if (strcmp(name, "SHELL") == 0)
-		return(_PATH_CSHELL);
+		return(_PATH_BSHELL);
 	else if (strcmp(name, "LISTER") == 0)
 		return(_PATH_LS);
 	else if (strcmp(name, "PAGER") == 0)

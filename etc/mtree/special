@@ -17,9 +17,6 @@ acme-client.conf	type=file mode=0644 uname=root gname=wheel optional
 bgpd.conf	type=file mode=0600 uname=root gname=wheel optional
 chio.conf	type=file mode=0644 uname=root gname=operator optional
 crontab		type=file mode=0600 uname=root gname=wheel optional
-csh.cshrc	type=file mode=0644 uname=root gname=wheel optional
-csh.login	type=file mode=0644 uname=root gname=wheel optional
-csh.logout	type=file mode=0644 uname=root gname=wheel optional
 daily		type=file mode=0644 uname=root gname=wheel
 daily.local	type=file mode=0644 uname=root gname=wheel optional
 dhcpd.conf	type=file mode=0644 uname=root gname=wheel optional
@@ -119,8 +116,6 @@ ypldap.conf	type=file mode=0600 uname=root gname=wheel optional
 ..	#etc
 
 root		type=dir mode=0700 uname=root gname=wheel
-.cshrc		type=file mode=0644 uname=root gname=wheel
-.login		type=file mode=0644 uname=root gname=wheel
 .profile	type=file mode=0644 uname=root gname=wheel
 .rhosts		type=file mode=0600 uname=root gname=wheel optional
 .ssh		type=dir mode=0700 uname=root gname=wheel

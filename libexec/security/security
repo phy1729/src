@@ -220,30 +220,6 @@ sub check_root_path {
 	}
 }
 
-# Check for umask values and root paths in startup files.
-sub check_csh {
-	my @list = qw(/etc/csh.cshrc /etc/csh.login /root/.cshrc /root/.login);
-	$check_title = "Checking root csh paths, umask values:\n@list";
-
-	my $umaskset = 0;
-	foreach my $filename (@list) {
-		next unless -s $filename;
-		$umaskset = 1 if check_umask $filename;
-
-		nag !(open my $fh, '-|', qw(/bin/csh -f -c),
-			"eval 'source $filename' >& /dev/null; " .
-			"echo PATH=\$path"),
-		    "cannot spawn /bin/csh: $!"
-		    and next;
-		my @output = <$fh>;
-		close_or_nag $fh, "csh $filename" or next;
-		chomp @output;
-		check_root_path pop @output, $filename;
-	}
-	nag !$umaskset,
-	    "\nRoot csh startup files do not set the umask.";
-}
-
 sub check_sh {
 	my @list = qw(/etc/profile /root/.profile);
 	$check_title = "Checking root sh paths, umask values:\n@list";
@@ -429,8 +405,8 @@ sub check_dot_writeable {
 	my ($name, $uid, $home) = @_;
 	return if $name =~ /^[+-]/;  # skip YP lines
 	foreach my $f (qw(
-	    .bashrc .bash_profile .bash_login .bash_logout .cshrc
-	    .emacs .exrc .forward .fvwmrc .inputrc .kshrc .login
+	    .bashrc .bash_profile .bash_login .bash_logout
+	    .emacs .exrc .forward .fvwmrc .inputrc .kshrc
 	    .logout .nexrc .profile .screenrc .ssh .ssh/config
 	    .ssh/authorized_keys .ssh/authorized_keys2 .ssh/environment
 	    .ssh/known_hosts .ssh/rc .tcshrc .twmrc .xsession .xinitrc
@@ -902,7 +878,6 @@ sub check_pkglist {
 check_passwd;
 backup_passwd;
 check_group;
-check_csh;
 check_ksh(check_sh);
 $check_title = "Checking configuration files:";
 check_mail_aliases;

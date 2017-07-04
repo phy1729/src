@@ -1,4 +1,3 @@
-./.cshrc
 ./.profile
 ./etc/acme-client.conf
 ./etc/changelist
@@ -30,9 +29,7 @@
 ./etc/pwd.db
 ./etc/shells
 ./etc/skel/.Xdefaults
-./etc/skel/.cshrc
 ./etc/skel/.cvsrc
-./etc/skel/.login
 ./etc/skel/.mailrc
 ./etc/skel/.profile
 ./etc/skel/.ssh/authorized_keys
@@ -46,9 +43,7 @@
 ./etc/syslog.conf
 ./etc/ttys
 ./root/.Xdefaults
-./root/.cshrc
 ./root/.cvsrc
-./root/.login
 ./root/.profile
 ./root/.ssh/authorized_keys
 ./var/crash/minfree

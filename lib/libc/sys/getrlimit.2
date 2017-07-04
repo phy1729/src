@@ -142,14 +142,9 @@ unless they were returned by a previous call to
 Because this information is stored in the per-process information,
 this system call must be executed directly by the shell if it
 is to affect all future processes created by the shell;
-.Ic limit
-is thus a built-in command to
-.Xr csh 1
-and
 .Ic ulimit
-is the
-.Xr sh 1
-equivalent.
+is thus a built-in command to
+.Xr sh 1 .
 .Pp
 The system refuses to extend the data or stack space when the limits
 would be exceeded in the normal way: a
@@ -205,7 +200,6 @@ is greater than the current maximum limit value,
 and the caller is not the superuser.
 .El
 .Sh SEE ALSO
-.Xr csh 1 ,
 .Xr sh 1 ,
 .Xr quotactl 2 ,
 .Xr sigaction 2 ,

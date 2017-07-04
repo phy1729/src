@@ -107,10 +107,6 @@ distribution-etc-root-var: distrib-dirs
 	${INSTALL} -c -o ${BINOWN} -g ${BINGRP} -m 555 \
 	    etc.${MACHINE}/MAKEDEV ${DESTDIR}/dev
 	cd root; \
-		${INSTALL} -c -o root -g wheel -m 644 dot.cshrc \
-		    ${DESTDIR}/root/.cshrc; \
-		${INSTALL} -c -o root -g wheel -m 644 dot.login \
-		    ${DESTDIR}/root/.login; \
 		${INSTALL} -c -o root -g wheel -m 644 dot.profile \
 		    ${DESTDIR}/root/.profile; \
 		${INSTALL} -c -o root -g wheel -m 644 dot.Xdefaults \
@@ -119,16 +115,10 @@ distribution-etc-root-var: distrib-dirs
 		    ${DESTDIR}/root/.cvsrc; \
 		${INSTALL} -c -o root -g wheel -m 600 /dev/null \
 		    ${DESTDIR}/root/.ssh/authorized_keys; \
-		rm -f ${DESTDIR}/.cshrc ${DESTDIR}/.profile; \
-		${INSTALL} -c -o root -g wheel -m 644 dot.cshrc \
-		    ${DESTDIR}/.cshrc; \
+		rm -f ${DESTDIR}/.profile; \
 		${INSTALL} -c -o root -g wheel -m 644 dot.profile \
 		    ${DESTDIR}/.profile
 	cd skel; \
-		${INSTALL} -c -o root -g wheel -m 644 dot.cshrc \
-		    ${DESTDIR}/etc/skel/.cshrc; \
-		${INSTALL} -c -o root -g wheel -m 644 dot.login \
-		    ${DESTDIR}/etc/skel/.login; \
 		${INSTALL} -c -o root -g wheel -m 644 dot.mailrc \
 		    ${DESTDIR}/etc/skel/.mailrc; \
 		${INSTALL} -c -o root -g wheel -m 644 dot.profile \

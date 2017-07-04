@@ -17,9 +17,6 @@
 /etc/changelist
 /etc/chio.conf
 /etc/crontab
-/etc/csh.cshrc
-/etc/csh.login
-/etc/csh.logout
 /etc/daily
 /etc/daily.local
 /etc/defaultdomain
@@ -143,8 +140,6 @@
 /etc/wsconsctl.conf
 /etc/ypldap.conf
 /root/.Xdefaults
-/root/.cshrc
-/root/.login
 /root/.profile
 /root/.rhosts
 /root/.shosts

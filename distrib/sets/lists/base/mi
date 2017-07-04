@@ -8,7 +8,6 @@
 ./bin/cksum
 ./bin/cp
 ./bin/cpio
-./bin/csh
 ./bin/date
 ./bin/dd
 ./bin/df
