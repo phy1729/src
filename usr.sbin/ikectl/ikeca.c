@@ -22,6 +22,7 @@
 #include <unistd.h>
 #include <err.h>
 #include <errno.h>
+#include <readpassphrase.h>
 #include <string.h>
 #include <stdlib.h>
 #include <sys/wait.h>
@@ -377,24 +378,21 @@ void
 ca_newpass(char *passfile, char *password)
 {
 	FILE	*f;
-	char	*pass;
+	char	 pass[_PASSWORD_LEN + 1];
 	char	 prev[_PASSWORD_LEN + 1];
 
 	if (password != NULL) {
-		pass = password;
-		goto done;
+		strlcpy(pass, password, sizeof(pass));
+	} else {
+		if (readpassphrase("CA passphrase:", prev, sizeof(prev), 0) ==
+		    NULL || *prev == '\0')
+			errx(1, "password not set");
+
+		if (readpassphrase("Retype CA passphrase:", pass, sizeof(pass),
+		    0) == NULL || strcmp(prev, pass) != 0)
+			errx(1, "passphrase does not match!");
 	}
 
-	pass = getpass("CA passphrase:");
-	if (pass == NULL || *pass == '\0')
-		err(1, "password not set");
-
-	strlcpy(prev, pass, sizeof(prev));
-	pass = getpass("Retype CA passphrase:");
-	if (pass == NULL || strcmp(prev, pass) != 0)
-		errx(1, "passphrase does not match!");
-
- done:
 	if ((f = fopen(passfile, "wb")) == NULL)
 		err(1, "could not open passfile %s", passfile);
 	chmod(passfile, 0600);
@@ -402,6 +400,8 @@ ca_newpass(char *passfile, char *password)
 	fprintf(f, "%s\n%s\n", pass, pass);
 
 	fclose(f);
+	explicit_bzero(pass, sizeof(pass));
+	explicit_bzero(prev, sizeof(prev));
 }
 
 int
@@ -657,7 +657,7 @@ ca_export(struct ca *ca, char *keyname, char *myname, char *password)
 	DIR		*dexp;
 	struct dirent	*de;
 	struct stat	 st;
-	char		*pass;
+	char		 pass[_PASSWORD_LEN + 1];
 	char		 prev[_PASSWORD_LEN + 1];
 	char		 passenv[_PASSWORD_LEN + 8];
 	char		 oname[PATH_MAX];
@@ -688,16 +688,21 @@ ca_export(struct ca *ca, char *keyname, char *myname, char *password)
 	if (password != NULL)
 		snprintf(passenv, sizeof(passenv), "EXPASS=%s", password);
 	else {
-		pass = getpass("Export passphrase:");
-		if (pass == NULL || *pass == '\0')
-			err(1, "password not set");
+		if (readpassphrase("Export passphrase:", prev, sizeof(prev), 0)
+		    == NULL)
+			errx(1, "unable to read passphrase");
+		if (*prev == '\0')
+			errx(1, "password not set");
 
-		strlcpy(prev, pass, sizeof(prev));
-		pass = getpass("Retype export passphrase:");
-		if (pass == NULL || strcmp(prev, pass) != 0)
+		if (readpassphrase("Retype export passphrase:", pass,
+		    sizeof(pass), 0) == NULL)
+			errx(1, "unable to read passphrase");
+		if (strcmp(prev, pass) != 0)
 			errx(1, "passphrase does not match!");
 
 		snprintf(passenv, sizeof(passenv), "EXPASS=%s", pass);
+		explicit_bzero(pass, sizeof(pass));
+		explicit_bzero(prev, sizeof(prev));
 	}
 
 	snprintf(cacrt, sizeof(cacrt), "%s/ca.crt", ca->sslpath);
