@@ -270,7 +270,6 @@ static char *restricted_environ[] = {
 static void
 timewarn(int timeleft) {
 	static char hostname[HOST_NAME_MAX+1];
-	char wcmd[PATH_MAX + 4];
 	extern char **environ;
 	static int first;
 	FILE *pf;
@@ -278,10 +277,9 @@ timewarn(int timeleft) {
 	if (!first++)
 		gethostname(hostname, sizeof(hostname));
 
-	/* undoc -n option to wall suppresses normal wall banner */
-	snprintf(wcmd, sizeof(wcmd), "%s -n", _PATH_WALL);
 	environ = restricted_environ;
-	if (!(pf = popen(wcmd, "w"))) {
+	/* undoc -n option to wall suppresses normal wall banner */
+	if (!(pf = popen(_PATH_WALL " -n", "w"))) {
 		syslog(LOG_ERR, "shutdown: can't find %s: %m", _PATH_WALL);
 		return;
 	}
