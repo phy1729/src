@@ -64,21 +64,19 @@
 #define	M		*60
 #define	S		*1
 #define	NOLOG_TIME	5*60
-struct interval {
-	int timeleft, timetowait;
-} tlist[] = {
-	{ 10 H,  5 H },
-	{  5 H,  3 H },
-	{  2 H,  1 H },
-	{  1 H, 30 M },
-	{ 30 M, 10 M },
-	{ 20 M, 10 M },
-	{ 10 M,  5 M },
-	{  5 M,  3 M },
-	{  2 M,  1 M },
-	{  1 M, 30 S },
-	{ 30 S, 30 S },
-	{    0,    0 }
+const unsigned int tlist[] = {
+	10 H,
+	 5 H,
+	 2 H,
+	 1 H,
+	30 M,
+	20 M,
+	10 M,
+	 5 M,
+	 2 M,
+	 1 M,
+	30 S,
+	   0,
 };
 #undef H
 #undef M
@@ -227,7 +225,7 @@ main(int argc, char *argv[]) {
 
 static void __dead
 loop(void) {
-	struct interval *tp;
+	const int *tp;
 	u_int sltime;
 	int logged;
 
@@ -237,30 +235,27 @@ loop(void) {
 	} else
 		logged = 0;
 	tp = tlist;
-	if (tp->timeleft < offset)
-		sleep(offset - tp->timeleft);
+	if (*tp < offset)
+		sleep(offset - *tp);
 	else {
-		while (offset < tp->timeleft)
+		while (offset < *tp)
 			++tp;
 		/*
 		 * Warn now, if going to sleep more than a fifth of
 		 * the next wait time.
 		 */
-		if ((sltime = offset - tp->timeleft)) {
-			if (sltime > tp->timetowait / 5)
-				timewarn(offset);
-			sleep(sltime);
-		}
+		sltime = offset - *tp;
+		if (sltime > (*tp - *(tp + 1)) / 5)
+			timewarn(offset);
+		sleep(sltime);
 	}
-	for (;; ++tp) {
-		timewarn(tp->timeleft);
-		if (!logged && tp->timeleft <= NOLOG_TIME) {
+	for (; *tp; ++tp) {
+		timewarn(*tp);
+		if (!logged && *tp <= NOLOG_TIME) {
 			logged = 1;
 			nolog();
 		}
-		sleep(tp->timetowait);
-		if (!tp->timeleft)
-			break;
+		sleep(*tp - *(tp + 1));
 	}
 	die_you_gravy_sucking_pig_dog();
 }
