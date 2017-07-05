@@ -85,9 +85,9 @@ struct interval {
 #undef S
 
 static time_t offset, shuttime;
-static int dofast, dohalt, doreboot, dopower, dodump, mbuflen, nosync;
+static int dofast, dohalt, doreboot, dopower, dodump, nosync;
 static sig_atomic_t killflg;
-static char *whom, mbuf[BUFSIZ];
+static char *whom, mbuf[BUFSIZ] = { 0 };
 
 static void	badtime(void);
 static void	__dead die_you_gravy_sucking_pig_dog(void);
@@ -192,7 +192,6 @@ main(int argc, char *argv[]) {
 			}
 		}
 	}
-	mbuflen = strlen(mbuf);
 
 	if (offset) {
 		char *ct = ctime(&shuttime);
@@ -309,8 +308,8 @@ timewarn(int timeleft) {
 	else
 		fprintf(pf, "System going down IMMEDIATELY\n\n");
 
-	if (mbuflen)
-		fwrite(mbuf, sizeof(*mbuf), mbuflen, pf);
+	if (*mbuf)
+		fwrite(mbuf, sizeof(*mbuf), strlen(mbuf), pf);
 
 	/*
 	 * play some games, just in case wall doesn't come back
