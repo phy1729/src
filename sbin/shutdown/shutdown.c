@@ -89,20 +89,19 @@ static int dofast, dohalt, doreboot, dopower, dodump, mbuflen, nosync;
 static sig_atomic_t killflg;
 static char *whom, mbuf[BUFSIZ];
 
-void badtime(void);
-void __dead die_you_gravy_sucking_pig_dog(void);
-void doitfast(void);
-void __dead finish(int);
-void getoffset(char *);
-void __dead loop(void);
-void nolog(void);
-void timeout(int);
-void timewarn(int);
-void usage(void);
+static void	badtime(void);
+static void	__dead die_you_gravy_sucking_pig_dog(void);
+static void	doitfast(void);
+static void	__dead finish(int);
+static void	getoffset(char *);
+static void	__dead loop(void);
+static void	nolog(void);
+static void	timeout(int);
+static void	timewarn(int);
+static void	__dead usage(void);
 
 int
-main(int argc, char *argv[])
-{
+main(int argc, char *argv[]) {
 	int arglen, ch, len, readstdin = 0;
 	struct passwd *pw;
 	char *p, *endp;
@@ -227,9 +226,8 @@ main(int argc, char *argv[])
 	/* NOTREACHED */
 }
 
-void
-loop(void)
-{
+static void __dead
+loop(void) {
 	struct interval *tp;
 	u_int sltime;
 	int logged;
@@ -275,9 +273,8 @@ static char *restricted_environ[] = {
 	NULL
 };
 
-void
-timewarn(int timeleft)
-{
+static void
+timewarn(int timeleft) {
 	static char hostname[HOST_NAME_MAX+1];
 	char wcmd[PATH_MAX + 4];
 	extern char **environ;
@@ -328,15 +325,13 @@ timewarn(int timeleft)
 	}
 }
 
-void
-timeout(int signo)
-{
+static void
+timeout(int signo) {
 	longjmp(alarmbuf, 1);		/* XXX signal/longjmp resource leaks */
 }
 
-void
-die_you_gravy_sucking_pig_dog(void)
-{
+static void __dead
+die_you_gravy_sucking_pig_dog(void) {
 
 	syslog(LOG_NOTICE, "%s by %s: %s",
 	    doreboot ? "reboot" : dopower ? "power-down" : dohalt ? "halt" :
@@ -436,9 +431,8 @@ die_you_gravy_sucking_pig_dog(void)
 
 #define	ATOI2(p)	(p[0] - '0') * 10 + (p[1] - '0'); p += 2;
 
-void
-getoffset(char *timearg)
-{
+static void
+getoffset(char *timearg) {
 	struct tm *lt;
 	int this_year;
 	time_t now;
@@ -518,9 +512,8 @@ getoffset(char *timearg)
 	}
 }
 
-void
-doitfast(void)
-{
+static void
+doitfast(void) {
 	int fastfd;
 
 	if ((fastfd = open(_PATH_FASTBOOT, O_WRONLY|O_CREAT|O_TRUNC,
@@ -530,7 +523,7 @@ doitfast(void)
 	}
 }
 
-void
+static void
 nolog(void) {
 	int logfd;
 	struct tm *tm;
@@ -550,9 +543,8 @@ nolog(void) {
 	}
 }
 
-void
-finish(int signo)
-{
+static void __dead
+finish(int signo) {
 	if (!killflg)
 		unlink(_PATH_NOLOGIN);
 	if (signo == 0)
@@ -561,15 +553,13 @@ finish(int signo)
 		_exit(0);
 }
 
-void
-badtime(void)
-{
+static void __dead
+badtime(void) {
 	errx(1, "bad time format.");
 }
 
-void
-usage(void)
-{
+static void __dead
+usage(void) {
 	fprintf(stderr,
 	    "usage: shutdown [-] [-dfhknpr] time [warning-message ...]\n");
 	exit(1);
