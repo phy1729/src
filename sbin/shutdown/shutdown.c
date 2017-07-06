@@ -171,8 +171,7 @@ main(int argc, char *argv[]) {
 			memcpy(p, *argv, arglen);
 			p += arglen;
 		}
-		*p = '\n';
-		*++p = '\0';
+		*p++ = '\n';
 	}
 
 	if (readstdin) {
@@ -220,41 +219,25 @@ main(int argc, char *argv[]) {
 #endif
 	openlog("shutdown", LOG_CONS, LOG_AUTH);
 	loop();
-	/* NOTREACHED */
 }
 
 static void __dead
 loop(void) {
-	const int *tp;
+	const int *tp = tlist;
 	u_int sltime;
-	int logged;
 
-	if (offset <= NOLOG_TIME) {
-		logged = 1;
+	while (offset < *tp)
+		++tp;
+
+	timewarn(offset);
+	if (offset <= NOLOG_TIME)
 		nolog();
-	} else
-		logged = 0;
-	tp = tlist;
-	if (*tp < offset)
-		sleep(offset - *tp);
-	else {
-		while (offset < *tp)
-			++tp;
-		/*
-		 * Warn now, if going to sleep more than a fifth of
-		 * the next wait time.
-		 */
-		sltime = offset - *tp;
-		if (sltime > (*tp - *(tp + 1)) / 5)
-			timewarn(offset);
-		sleep(sltime);
-	}
+	sleep(offset - *tp);
+
 	for (; *tp; ++tp) {
 		timewarn(*tp);
-		if (!logged && *tp <= NOLOG_TIME) {
-			logged = 1;
+		if (*tp <= NOLOG_TIME)
 			nolog();
-		}
 		sleep(*tp - *(tp + 1));
 	}
 	die_you_gravy_sucking_pig_dog();
@@ -295,9 +278,10 @@ timewarn(int timeleft) {
 		    tm->tm_hour, tm->tm_min);
 	} else if (timeleft > 59)
 		fprintf(pf, "System going down in %d minute%s\n\n",
-		    timeleft / 60, (timeleft > 60) ? "s" : "");
+		    timeleft / 60, (timeleft >= 120) ? "s" : "");
 	else if (timeleft)
-		fprintf(pf, "System going down in 30 seconds\n\n");
+		fprintf(pf, "System going down in %d seconds\n\n",
+		    timeleft);
 	else
 		fprintf(pf, "System going down IMMEDIATELY\n\n");
 
@@ -518,7 +502,13 @@ doitfast(void) {
 static void
 nolog(void) {
 	int logfd;
+	static int logged = 0;
 	struct tm *tm;
+
+	if (logged)
+		return;
+
+	logged=1;
 
 	unlink(_PATH_NOLOGIN);	/* in case linked to another file */
 	signal(SIGINT, finish);
