@@ -110,7 +110,7 @@ CKSUM_Update(CKSUM_CTX *ctx, const unsigned char *buf, size_t len)
 void
 CKSUM_Final(CKSUM_CTX *ctx)
 {
-	off_t len = ctx->len;
+	size_t len = ctx->len;
 
 	/* add in number of bytes read and finish */
 	while (len != 0) {
@@ -126,11 +126,11 @@ CKSUM_End(CKSUM_CTX *ctx, char *outstr)
 	CKSUM_Final(ctx);
 
 	if (outstr == NULL) {
-		if (asprintf(&outstr, "%u %lld", ctx->crc, ctx->len) == -1)
+		if (asprintf(&outstr, "%u %lu", ctx->crc, ctx->len) == -1)
 			return (NULL);
 	} else {
 		(void)snprintf(outstr, (size_t)CKSUM_DIGEST_STRING_LENGTH,
-		    "%u %lld", ctx->crc, ctx->len);
+		    "%u %lu", ctx->crc, ctx->len);
 	}
 
 	return (outstr);

@@ -178,7 +178,7 @@ rd_nm(ARCHD *arcn, int nsz)
 	/*
 	 * do not even try bogus values
 	 */
-	if ((nsz == 0) || ((size_t)nsz > sizeof(arcn->name))) {
+	if ((nsz <= 0) || (nsz > sizeof(arcn->name))) {
 		paxwarn(1, "Cpio file name length %d is out of range", nsz);
 		return(-1);
 	}

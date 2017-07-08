@@ -177,7 +177,8 @@ _mcleanup(void)
 	moncontrol(0);
 
 	if (issetugid() == 0 && (profdir = getenv("PROFDIR")) != NULL) {
-		char *s, *t, *limit;
+		const char *s;
+		char *t, *limit;
 		pid_t pid;
 		long divisor;
 

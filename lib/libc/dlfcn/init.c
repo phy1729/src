@@ -53,7 +53,7 @@ int	_pagesize = 0;
  * the definitions in ld.so.
  */
 char	**environ __attribute__((weak)) = NULL;
-char	*__progname __attribute__((weak)) = NULL;
+const char	*__progname __attribute__((weak)) = NULL;
 
 
 #ifndef PIC

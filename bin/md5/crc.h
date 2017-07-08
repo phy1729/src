@@ -21,7 +21,7 @@
 
 typedef struct CKSUMContext {
 	u_int32_t crc;
-	off_t len;
+	size_t len;
 } CKSUM_CTX;
 
 void	 CKSUM_Init(CKSUM_CTX *);
