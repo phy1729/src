@@ -91,7 +91,8 @@ enum token_types {
 
 struct t_op {
 	const char *op_text;
-	short op_num, op_type;
+	enum token op_num;
+	enum token_types op_type;
 } const ops [] = {
 	{"-r",	FILRD,	UNOP},
 	{"-w",	FILWR,	UNOP},
@@ -330,9 +331,9 @@ binop(void)
 		return olderf(opnd1, opnd2);
 	case FILEQ:
 		return equalf(opnd1, opnd2);
+	default:
+		syntax(op->op_text, "not a binary operator");
 	}
-
-	syntax(op->op_text, "not a binary operator");
 }
 
 static enum token_types
