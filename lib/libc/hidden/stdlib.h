@@ -43,7 +43,7 @@ void	__atexit_register_cleanup(void (*)(void));
 __END_HIDDEN_DECLS
 
 extern char **environ;
-extern char *__progname;
+extern const char *__progname;
 
 #if 0
 /*extern PROTO_NORMAL(suboptarg);*/
