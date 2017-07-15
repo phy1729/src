@@ -237,8 +237,7 @@ dircheck(struct inodesc *idesc, struct ext2fs_direct *dp)
 			return (1);
 	size = EXT2FS_DIRSIZ(dp->e2d_namlen);
 	if (reclen < size ||
-	    idesc->id_filesize < size ||
-	    dp->e2d_namlen > EXT2FS_MAXNAMLEN)
+	    idesc->id_filesize < size)
 		return (0);
 	for (cp = dp->e2d_name, size = 0; size < dp->e2d_namlen; size++)
 		if (*cp == '\0' || (*cp++ == '/'))
