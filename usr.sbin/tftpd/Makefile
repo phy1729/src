@@ -4,8 +4,7 @@ PROG=	tftpd
 SRCS=	tftpd.c
 LDADD=	-levent
 DPADD=	${LIBEVENT}
-CFLAGS+= -Wall
-CDIAGFLAGS=
+WARNINGS=	yes
 
 MAN=	tftpd.8
 

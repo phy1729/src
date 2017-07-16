@@ -3,8 +3,7 @@
 .if ${MACHINE} == "sparc64"
 
 PROG=	mksuncd
-CFLAGS+=-Wall -Wstrict-prototypes -Wmissing-prototypes
-CDIAGFLAGS=
+WARNINGS=	yes
 
 .else
 NOPROG=

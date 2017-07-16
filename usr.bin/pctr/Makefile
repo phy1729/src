@@ -2,11 +2,9 @@
 
 MAN=pctr.1
 
-CFLAGS+=-W -Wall
-CDIAGFLAGS=
-
 .if ${MACHINE} == "amd64" || ${MACHINE} == "i386"
 PROG=	pctr
+WARNINGS=	yes
 .else
 NOPROG=
 .endif

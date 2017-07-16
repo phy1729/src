@@ -3,7 +3,7 @@
 PROG=	cu
 SRCS=	cu.c command.c error.c input.c xmodem.c
 
-CDIAGFLAGS+= -Wall -W -Wno-unused-parameter
+WARNINGS=	yes
 
 LDADD=  -levent
 DPADD=  ${LIBEVENT}
