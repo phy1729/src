@@ -556,13 +556,13 @@ run(int cmd, char *arg)
  * Check if audio file has RIFF WAVE format. If not, we assume it's just PCM.
  */
 int
-is_wave(int fd)
+is_wave(int trfd)
 {
 	char buf[WAVHDRLEN];
 	int rv;
 
 	rv = 0;
-	if (read(fd, buf, sizeof(buf)) == sizeof(buf)) {
+	if (read(trfd, buf, sizeof(buf)) == sizeof(buf)) {
 		if (memcmp(buf, "RIFF", 4) == 0 &&
 		    memcmp(buf + 8, "WAVE", 4) == 0)
 			rv = 1;

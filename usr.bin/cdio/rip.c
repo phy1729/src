@@ -300,12 +300,12 @@ parse_tracks_add(struct track_pair_head *head, u_char first, u_char last,
 }
 
 static int
-write_sector(int fd, u_char *sec, u_int32_t secsize)
+write_sector(int trfd, u_char *sec, u_int32_t secsize)
 {
 	ssize_t res;
 
 	while (secsize > 0) {
-		res = write(fd, sec, secsize);
+		res = write(trfd, sec, secsize);
 		if (res < 0)
 			return (-1);
 
