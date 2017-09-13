@@ -872,6 +872,10 @@ main(int argc, char *argv[])
 			break;
 	}
 	summary();
+	if (seenint) {
+		signal(SIGINT, SIG_DFL);
+		kill(getpid(), SIGINT);
+	}
 	exit(nreceived == 0);
 }
 
