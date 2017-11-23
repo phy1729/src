@@ -16,12 +16,12 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#include <errno.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdarg.h>
 #include <string.h>
 #include <syslog.h>
-#include <errno.h>
 #include <time.h>
 
 static int	 debug;
@@ -52,14 +52,12 @@ __dead void fatalx(const char *, ...)
 void
 log_init(int n_debug, int facility)
 {
-	extern char	*__progname;
-
 	debug = n_debug;
 	verbose = n_debug;
-	log_procinit(__progname);
+	log_procinit(getprogname());
 
 	if (!debug)
-		openlog(__progname, LOG_PID | LOG_NDELAY, facility);
+		openlog(getprogname(), LOG_PID | LOG_NDELAY, facility);
 
 	tzset();
 }

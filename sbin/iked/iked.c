@@ -21,17 +21,17 @@
 #include <sys/wait.h>
 #include <sys/uio.h>
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
-#include <getopt.h>
-#include <signal.h>
-#include <syslog.h>
-#include <errno.h>
 #include <err.h>
-#include <pwd.h>
+#include <errno.h>
 #include <event.h>
+#include <getopt.h>
+#include <pwd.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <syslog.h>
+#include <unistd.h>
 
 #include "iked.h"
 #include "ikev2.h"
@@ -53,10 +53,8 @@ static struct privsep_proc procs[] = {
 __dead void
 usage(void)
 {
-	extern char	*__progname;
-
 	fprintf(stderr, "usage: %s [-6dnSTtv] [-D macro=value] "
-	    "[-f file]\n", __progname);
+	    "[-f file]\n", getprogname());
 	exit(1);
 }
 
@@ -65,36 +63,32 @@ main(int argc, char *argv[])
 {
 	int		 c;
 	int		 debug = 0, verbose = 0;
-	int		 opts = 0;
+	uint32_t	 opts = 0;
 	const char	*conffile = IKED_CONFIG;
-	struct iked	*env = NULL;
+	struct iked	*env;
 	struct privsep	*ps;
 
 	log_init(1, LOG_DAEMON);
 
-	while ((c = getopt(argc, argv, "6dD:nf:vSTt")) != -1) {
+	while ((c = getopt(argc, argv, "6D:df:nSTtv")) != -1) {
 		switch (c) {
 		case '6':
 			opts |= IKED_OPT_NOIPV6BLOCKING;
-			break;
-		case 'd':
-			debug++;
 			break;
 		case 'D':
 			if (cmdline_symset(optarg) < 0)
 				log_warnx("could not parse macro definition %s",
 				    optarg);
 			break;
-		case 'n':
-			debug = 1;
-			opts |= IKED_OPT_NOACTION;
+		case 'd':
+			debug++;
 			break;
 		case 'f':
 			conffile = optarg;
 			break;
-		case 'v':
-			verbose++;
-			opts |= IKED_OPT_VERBOSE;
+		case 'n':
+			debug = 1;
+			opts |= IKED_OPT_NOACTION;
 			break;
 		case 'S':
 			opts |= IKED_OPT_PASSIVE;
@@ -104,6 +98,10 @@ main(int argc, char *argv[])
 			break;
 		case 't':
 			opts |= IKED_OPT_NATT;
+			break;
+		case 'v':
+			verbose++;
+			opts |= IKED_OPT_VERBOSE;
 			break;
 		default:
 			usage();
@@ -128,8 +126,9 @@ main(int argc, char *argv[])
 	    (IKED_OPT_NONATT|IKED_OPT_NATT))
 		errx(1, "conflicting NAT-T options");
 
-	if (strlcpy(env->sc_conffile, conffile, PATH_MAX) >= PATH_MAX)
-		errx(1, "config file exceeds PATH_MAX");
+	if (strlcpy(env->sc_conffile, conffile, sizeof(env->sc_conffile)) >=
+	    sizeof(env->sc_conffile))
+		errx(1, "config file path is too long");
 
 	ca_sslinit();
 	policy_init(env);

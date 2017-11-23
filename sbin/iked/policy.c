@@ -22,13 +22,13 @@
 #include <sys/uio.h>
 #include <sys/tree.h>
 
+#include <errno.h>
+#include <event.h>
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <event.h>
+#include <unistd.h>
 
 #include "iked.h"
 #include "ikev2.h"
