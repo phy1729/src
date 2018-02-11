@@ -31,6 +31,7 @@
  */
 
 #include <sys/param.h>	/* ALIGN */
+#include <assert.h>
 #include <fcntl.h>
 #include <db.h>
 #include <syslog.h>
@@ -358,6 +359,7 @@ again:
 			break;
 		case YPMODE_NONE:
 			/* NOTREACHED */
+			assert(0);
 			break;
 		}
 

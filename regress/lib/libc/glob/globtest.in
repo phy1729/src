@@ -6,7 +6,6 @@ fake/bin/chmod
 fake/bin/cksum
 fake/bin/cp
 fake/bin/cpio
-fake/bin/csh
 fake/bin/date
 fake/bin/dd
 fake/bin/df
@@ -54,7 +53,6 @@ fake/bin/chmod 0100644
 fake/bin/cksum 0100644
 fake/bin/cp 0100644
 fake/bin/cpio 0100644
-fake/bin/csh 0100644
 fake/bin/date 0100644
 fake/bin/dd 0100644
 fake/bin/df 0100644

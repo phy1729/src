@@ -765,7 +765,6 @@ setdefaults(user_t *up)
 static void
 read_defaults(user_t *up)
 {
-	struct stat	st;
 	size_t		lineno;
 	size_t		len;
 	FILE		*fp;
@@ -784,13 +783,7 @@ read_defaults(user_t *up)
 		err(1, NULL);
 	up->u_inactive = DEF_INACTIVE;
 	up->u_expire = DEF_EXPIRE;
-	if ((fp = fopen(CONFFILE, "r")) == NULL) {
-		if (stat(CONFFILE, &st) < 0 && !setdefaults(up)) {
-			warn("can't create `%s' defaults file", CONFFILE);
-		}
-		fp = fopen(CONFFILE, "r");
-	}
-	if (fp != NULL) {
+	if ((fp = fopen(CONFFILE, "r")) != NULL) {
 		while ((s = fparseln(fp, &len, &lineno, NULL, 0)) != NULL) {
 			if (strncmp(s, "group", 5) == 0) {
 				for (cp = s + 5 ; isspace((unsigned char)*cp); cp++) {

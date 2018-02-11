@@ -2,7 +2,7 @@
 
 .include <bsd.own.mk>
 
-SUBDIR= apply arch at aucat audioctl awk banner \
+SUBDIR= arch at aucat audioctl awk banner \
 	basename bc bgplg \
 	biff cal calendar cap_mkdb cdio chpass cmp col colrm \
 	column comm compress cpp crontab csplit ctags ctfconv ctfdump \

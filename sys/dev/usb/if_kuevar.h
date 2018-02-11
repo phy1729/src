@@ -20,5 +20,5 @@ struct kue_firmware {
 	int		codeseglen;
 	int		fixseglen;
 	int		trigseglen;
-	u_char		data[4];
+	u_char		data[0];
 };

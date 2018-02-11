@@ -148,8 +148,8 @@ main(int argc, char *argv[])
 
 	login_close(lc);
 
-	if (strcmp(shell, PATH_AUTHPF_SHELL) &&
-	    strcmp(shell, PATH_AUTHPF_SHELL_NOIP)) {
+	if (strcmp(shell,
+	    user_ip ? PATH_AUTHPF_SHELL : PATH_AUTHPF_SHELL_NOIP)) {
 		syslog(LOG_ERR, "wrong shell for user %s, uid %u",
 		    pw->pw_name, pw->pw_uid);
 		if (shell != pw->pw_shell)
@@ -225,7 +225,7 @@ main(int argc, char *argv[])
 			goto die;
 		}
 
-		if (flock(fileno(pidfp), LOCK_EX|LOCK_NB) == 0)
+		if (flock(pidfd, LOCK_EX|LOCK_NB) == 0)
 			break;
 		save_errno = errno;
 
@@ -308,7 +308,7 @@ main(int argc, char *argv[])
 	rewind(pidfp);
 	fprintf(pidfp, "%ld\n%s\n", (long)getpid(), luser);
 	fflush(pidfp);
-	(void) ftruncate(fileno(pidfp), ftello(pidfp));
+	(void) ftruncate(pidfd, ftello(pidfp));
 
 	if (change_filter(1, luser, ipsrc) == -1) {
 		printf("Unable to modify filters\r\n");
@@ -945,7 +945,7 @@ do_death(int active)
 			authpf_kill_states();
 		}
 	}
-	if (pidfile[0] && pidfd != -1)
+	if (pidfd != -1)
 		if (unlink(pidfile) == -1)
 			syslog(LOG_ERR, "cannot unlink %s (%m)", pidfile);
 	exit(ret);

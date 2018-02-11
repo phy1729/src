@@ -33,7 +33,7 @@ struct yds_firmware {
 	int		dsplen;
 	int		ds1len;
 	int		ds1elen;
-	u_char		data[4];
+	u_char		data[0];
 };
 
 

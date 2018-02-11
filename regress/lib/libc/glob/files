@@ -6,7 +6,6 @@ fake/bin/chmod
 fake/bin/cksum
 fake/bin/cp
 fake/bin/cpio
-fake/bin/csh
 fake/bin/date
 fake/bin/dd
 fake/bin/df

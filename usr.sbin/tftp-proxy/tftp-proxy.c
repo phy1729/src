@@ -545,7 +545,7 @@ proxy_listen(const char *addr, const char *port, int family)
 
 	struct addrinfo hints, *res, *res0;
 	int error;
-	int s, on = 1;
+	int s;
 	int serrno;
 	const char *cause = NULL;
 

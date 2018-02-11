@@ -68,7 +68,9 @@ static void	_ng_sl_free(struct stringlist *, int);
 static char    *_ng_sl_find(struct stringlist *, char *);
 static char    *_ng_makekey(const char *, const char *, size_t);
 static int	_ng_parse(char **, char **, struct netgroup **);
+#ifdef DEBUG_NG
 static void	_ng_print(char *, size_t, const struct netgroup *);
+#endif
 
 static int		getstring(char **, int, char **);
 static struct netgroup	*getnetgroup(char **);
@@ -522,12 +524,14 @@ _ng_makekey(const char *s1, const char *s2, size_t len)
 	return buf;
 }
 
+#ifdef DEBUG_NG
 static void
 _ng_print(char *buf, size_t len, const struct netgroup *ng)
 {
 	(void) snprintf(buf, len, "(%s,%s,%s)", _NG_EMPTY(ng->ng_host),
 	    _NG_EMPTY(ng->ng_user), _NG_EMPTY(ng->ng_domain));
 }
+#endif
 
 
 /*

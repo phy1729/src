@@ -94,7 +94,7 @@ sub variables {
     # List of directories where shells located
     @path = ('/bin', '/usr/bin', '/usr/local/bin');
     # common shells, first element has higher priority
-    @shellpref = ('csh', 'sh', 'bash', 'tcsh', 'ksh');
+    @shellpref = ('sh', 'bash', 'tcsh', 'ksh');
 
     @encryption_methods = ('auto', 'blowfish' );
 
@@ -1600,7 +1600,7 @@ home = "$home"
 path = ($shpath)
 
 # common shell list, first element has higher priority
-# shellpref = ('bash', 'tcsh', 'ksh', 'csh', 'sh')
+# shellpref = ('bash', 'tcsh', 'ksh', 'sh')
 shellpref = ($shpref)
 
 # defaultshell if not empty ("bash")

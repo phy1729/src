@@ -679,7 +679,7 @@ find_voltag(char *voltag, int *type, int *unit)
 {
 	struct changer_element_status_request cmd;
 	struct changer_params data;
-	int i, chet, schet, echet, found;
+	int i, chet, schet, echet;
 	size_t count = 0;
 
 	/*
@@ -690,7 +690,6 @@ find_voltag(char *voltag, int *type, int *unit)
 	if (ioctl(changer_fd, CHIOGPARAMS, &data))
 		err(1, "%s: CHIOGPARAMS", changer_name);
 
-	found = 0;
 	schet = CHET_MT;
 	echet = CHET_DT;
 
@@ -713,7 +712,7 @@ find_voltag(char *voltag, int *type, int *unit)
 			count = data.cp_ndrives;
 			break;
 		}
-		if (count == 0 || found)
+		if (count == 0)
 			continue;
 
 		bzero(&cmd, sizeof(cmd));
@@ -742,7 +741,6 @@ find_voltag(char *voltag, int *type, int *unit)
 			    == 0) {
 				*type = chet;
 				*unit = i;
-				found = 1;
 				free(cmd.cesr_data);
 				return;
 			}

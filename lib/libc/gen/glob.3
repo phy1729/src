@@ -209,13 +209,11 @@ to provide globbing from directories stored on tape.
 .It Dv GLOB_BRACE
 Pre-process the pattern string to expand
 .Ql {pat,pat,...}
-strings like
-.Xr csh 1 .
+strings like csh.
 The pattern
 .Ql {}
 is left unexpanded for historical reasons.
-.Xr ( csh 1
-does the same thing to ease typing of
+(csh does the same thing to ease typing of
 .Xr find 1
 patterns.)
 .It Dv GLOB_KEEPSTAT
@@ -249,9 +247,8 @@ if it does not contain any of the special characters
 or
 .Ql \&[ .
 .Dv GLOB_NOMAGIC
-is provided to simplify implementing the historic
-.Xr csh 1
-globbing behavior and should probably not be used anywhere else.
+is provided to simplify implementing the historic csh globbing behavior and
+should probably not be used anywhere else.
 .It Dv GLOB_QUOTE
 This option has no effect and is included for backwards
 compatibility with older sources.

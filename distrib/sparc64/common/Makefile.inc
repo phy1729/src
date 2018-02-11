@@ -67,9 +67,6 @@ rd_teardown:
 	cp ${REALIMAGE} ${IMAGE}
 	rm ${REALIMAGE}
 
-rdsetroot:	${TOP}/../../common/elfrdsetroot.c
-	${HOSTCC} -o rdsetroot ${TOP}/../../common/elfrdsetroot.c
-
 unconfig:
 	-umount -f ${MOUNT_POINT}
 	-vnconfig -u ${VND}
@@ -103,6 +100,6 @@ do_files:
 clean cleandir:
 	/bin/rm -f *.core ${IMAGE} ${CBIN} ${CBIN}.mk ${CBIN}*.cache \
 	    lib*.a lib*.olist ${CBIN}.map \
-	    *.o *.lo *.c bsd bsd.rd bsd.gz bsd.strip floppy*.fs rdsetroot
+	    *.o *.lo *.c bsd bsd.rd bsd.gz bsd.strip floppy*.fs
 
 .include <bsd.subdir.mk>

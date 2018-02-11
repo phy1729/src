@@ -68,15 +68,15 @@ utility):
 .Dl (sleep 1800; sh command_file >& errors)&
 .Pp
 To repetitively run a command (with
-.Xr csh 1 ) :
+.Xr sh 1 ) :
 .Bd -literal -offset indent
-while (! -r zzz.rawdata)
+while ! [ -r zzz.rawdata ]; do
 	sleep 300
-end
-foreach i (*.rawdata)
+done
+for i in *.rawdata; do
 	sleep 70
-	awk -f collapse_data $i >> results
-end
+	awk -f collapse_data "$i" >> results
+done
 .Ed
 .Pp
 The scenario for such a script might be: a program currently

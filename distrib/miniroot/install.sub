@@ -588,6 +588,7 @@ get_responsefile() {
 			ask_which "network interface" \
 				"should be used for the initial DHCP request" \
 				"$*"
+			[[ $resp == done ]] && break 2
 			isin "$resp" $* && _if=$resp && break
 		done
 

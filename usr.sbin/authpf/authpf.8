@@ -350,7 +350,7 @@ To make that happen,
 .Xr login.conf 5
 should have entries that look something like this:
 .Bd -literal -offset indent
-shell-default:shell=/bin/csh
+shell-default:shell=/bin/ksh
 
 default:\e
 	...
@@ -358,19 +358,19 @@ default:\e
 
 daemon:\e
 	...
-	:shell=/bin/csh:\e
+	:shell=/bin/ksh:\e
 	:tc=default:
 
 staff:\e
 	...
-	:shell=/bin/csh:\e
+	:shell=/bin/ksh:\e
 	:tc=default:
 .Ed
 .Pp
 Using a default password file, all users will get
 .Nm
 as their shell except for root who will get
-.Pa /bin/csh .
+.Pa /bin/ksh .
 .Pp
 .Sy SSH Configuration
 \- As stated earlier,
